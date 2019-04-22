@@ -50,7 +50,7 @@ app.get('/', function (req, res) {
         //then append that element to existing container
         //then display the page
       }
-      res.send(JSON.parse(memories);
+      res.send(JSON.parse(memories));
       username = result.rows[0].username;
       message = result.rows[0].message;
       client.release();
