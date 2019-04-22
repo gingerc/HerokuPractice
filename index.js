@@ -17,15 +17,16 @@ app.use(bodyParser.urlencoded({    //url support
     extended: true
   })); 
 app.use('/public', express.static('public'));
-const {Pool} = require('pg');
+const {Client} = require('pg');
 
 //HEROKU_POSTGRESQL_MAUVE_URL
 
-const pool = new Pool({
+const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl:true
 });
 
+client.connect();
 
 // let client = new Client({database: 'forum', ssl:true})
 // client.connect()
@@ -48,7 +49,7 @@ const pool = new Pool({
 
  app.get('/', async (req, res) => {
     try {
-      const client = await pool.connect()
+      //const client = await pool.connect()
       const result = await client.query('SELECT * FROM forum');
       //const results = { 'results': (result) ? result.rows : null};
       for (var i = 0; i < result.rows.length; i++) {
@@ -60,7 +61,7 @@ const pool = new Pool({
       res.render('index', {
         memories
     })
-      client.release();
+    //   client.release();
     } catch (err){
         console.error(err);
         res.send("Error" + err);
@@ -84,8 +85,8 @@ app.post('/post', function (req, res) {
         //   } catch (err){
         //       console.error(err);
         //       res.send("Error" + err);
-        //   }
-        const client = pool.connect();
+        //   } 
+  
         client.query('INSERT INTO forum (message) VALUES (\'' + text + '\')',  (err, res) => {
             if (err) { console.log(err)}
             else {
