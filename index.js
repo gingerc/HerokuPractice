@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 var mustacheExpress = require('mustache-express');
 
 const app = express ();
+const PORT = process.env.PORT || 5000
 
 app.engine('html', mustacheExpress());
 app.set('view engine', 'html');
@@ -12,6 +13,27 @@ app.use(bodyParser.json())          //json support
 app.use(bodyParser.urlencoded({    //url support
     extended: true
   })); 
+app.use('/public', express.static('public'));
+
+
+//HEROKU_POSTGRESQL_MAUVE_URL
+// const { Client } = require('pg');
+
+// const client = new Client({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: true,
+// });
+
+// client.connect();
+
+// client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+//   if (err) throw err;
+//   for (let row of res.rows) {
+//     console.log(JSON.stringify(row));
+//   }
+//   client.end();
+// });
+
 
 const {Pool} = require('pg');
 
@@ -20,21 +42,24 @@ const pool = new Pool({
     ssl:true
 });
 
-const PORT = process.env.PORT || 5000
-
-app.use('/public', express.static('public'));
-
 
 app.get('/', function (req, res) {
     res.sendFile( __dirname + "/" + "index.html" );
  })
 
+ var username;
+ var message;
+
  app.get('/db', async (req, res) => {
     try {
       const client = await pool.connect()
-      const result = await client.query('SELECT * FROM posts');
+      const result = await client.query('SELECT * FROM forum');
      // const results = { 'results': (result) ? result.rows : null};
-      res.send(result.rows[0]);
+      for (var i = 0; i < result.rows.length, i++){
+        res.send(result.rows[i]);
+      }
+      username = result.rows[0].username;
+      message = result.rows[0].message;
       client.release();
     } catch (err){
         console.error(err);
@@ -43,8 +68,8 @@ app.get('/', function (req, res) {
 })
 
  var postContent = {
-     name : "Carol",
-     message : "Hello"
+     name : username,
+     message : message
  }
 
 //  var postContainer = document.getElementById("postContainer");
