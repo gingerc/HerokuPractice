@@ -8,7 +8,6 @@ const PORT = process.env.PORT || 5000
 
 var memories = [];
 
-
 app.engine('html', mustacheExpress());
 app.set('view engine', 'html');
 app.set('views', __dirname);
@@ -40,22 +39,17 @@ app.get('/', function (req, res) {
  app.get('/db', async (req, res) => {
     try {
       const client = await pool.connect()
-      const result = await client.query('SELECT * FROM forum', function (err, res){
-          if (err){
-              console.log(err)
-          }
-          for (var i = 0; i < result.rows.length; i++) {
-            log += result.rows[i].message + "<br>";
-            //create a new html element 
-            //then append that element to existing container
-            //then display the page
-          }
-      });
-      
-    //  const results = { 'results': (result) ? result.rows : null};  
+      const result = await client.query('SELECT * FROM forum');
+     // const results = { 'results': (result) ? result.rows : null};
+      for (var i = 0; i < result.rows.length; i++) {
+        log += result.rows[i].message + "<br>";
+        //create a new html element 
+        //then append that element to existing container
+        //then display the page
+      }
       res.send(log);
-    //   username = result.rows[0].username;
-    //   message = result.rows[0].message;
+      username = result.rows[0].username;
+      message = result.rows[0].message;
       client.release();
     } catch (err){
         console.error(err);
@@ -63,10 +57,10 @@ app.get('/', function (req, res) {
     }
 })
 
-//  var postContent = {
-//      name : username,
-//      message : message
-//  }
+ var postContent = {
+     name : username,
+     message : message
+ }
 
 //  var postContainer = document.getElementById("postContainer");
 //  var postTemplate = Mustache.render("{{name}} says \"{{message}}\" ", postContent);
