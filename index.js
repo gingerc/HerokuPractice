@@ -93,7 +93,7 @@ app.post('/post', function (req, res) {
                 console.log("posted successfully");
             }
          })
-         client.release();
+         //client.release();
     }
     res.redirect('/');
 })
