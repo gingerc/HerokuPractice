@@ -1,8 +1,8 @@
 const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
-var mustacheExpress = require('mustache-express');
-
+const mustacheExpress = require('mustache-express');
+const url = require('url')
 
 const app = express ();
 const PORT = process.env.PORT || 5000
@@ -21,72 +21,73 @@ app.use('/public', express.static('public'));
 
 //HEROKU_POSTGRESQL_MAUVE_URL
 
-const {Pool} = require('pg');
+const {Client} = require('pg');
 
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl:true
-});
+// const pool = new Pool({
+//     connectionString: process.env.DATABASE_URL,
+//     ssl:true
+// });
 
+let client = new Client({database: 'dbtest1', ssl:true})
+client.connect()
 
 app.get('/', function (req, res) {
-    res.sendFile( __dirname + "/" + "index.html" );
+    client.query('SELECT * FROM forum', (err, resSQL) => {
+        if (err){
+            console.log(err)
+        } else {
+            for (var i = 0; i < resSQL.rows.length; i++) {
+            memories.push("<p>"+ resSQL.rows[i].message  + "</p><br>");
+            res.render('index', {
+                memories
+            })
+          }
+        }
+    })
+    
  })
 
- var username = [];
- var message = [];
+//  var username = [];
+//  var message = [];
 
 
- app.get('/db', async (req, res) => {
-    try {
-      const client = await pool.connect()
-      const result = await client.query('SELECT * FROM forum');
-     // const results = { 'results': (result) ? result.rows : null};
-      for (var i = 0; i < result.rows.length; i++) {
-        //log += result.rows[i].message + "<br>";
-        memories.push("<p>"+ result.rows[i].message  + "</p><br>");
-        username.push(result.rows[i].username);
-        message.push(result.rows[i].message);
-      }
-      //read the html file first
-      //document.getElementById("postContainer").innerHTML = memories;
-      res.send(memories);
+//  app.get('/db', async (req, res) => {
+//     try {
+//       const client = await pool.connect()
+//       const result = await client.query('SELECT * FROM forum');
+//      // const results = { 'results': (result) ? result.rows : null};
+//       for (var i = 0; i < result.rows.length; i++) {
+//         //log += result.rows[i].message + "<br>";
+//         memories.push("<p>"+ result.rows[i].message  + "</p><br>");
+//         username.push(result.rows[i].username);
+//         message.push(result.rows[i].message);
+//       }
+//       //read the html file first
+//       //document.getElementById("postContainer").innerHTML = memories;
+//       res.send(memories);
 
-      client.release();
-    } catch (err){
-        console.error(err);
-        res.send("Error" + err);
+//       client.release();
+//     } catch (err){
+//         console.error(err);
+//         res.send("Error" + err);
+//     }
+// })
+
+app.post('/post', function (req, res){
+    var text = req.body.userinput;
+    if (text == " "){
+        res.send('please enter something');
+    } else {
+        client.query('INSERT INTO forum (message) VALUES (\'' + text + '\')',  (err, res) => {
+            if (err) { console.log(err)}
+            else {
+                console.log("posted successfully");
+            }
+         })
     }
+    res.redirect('/');
 })
 
- var postContent = {
-     name : username,
-     message : message
- }
-
-//  var postContainer = document.getElementById("postContainer");
-//  var postTemplate = Mustache.render("{{name}} says \"{{message}}\" ", postContent);
-//  postContainer.append(postTemplate);
-
-
-
-
-// var client = new Client({database: 'memoryforum'});
-// client.connect();
-
-// const text = 'INTO posts (message) VALUES ($1)';
-// const vlaues = ['I remember a blue rose.']
-
-// // client.query('SELECT * FROM posts', (err, res) => {  //query, vlaue, callback
-// //     if (err) throw err;
-// //     console.log(res);
-// //     client.end();
-// // })
-
-
-
-
-//display the forum 
 
 
 
