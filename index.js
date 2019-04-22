@@ -47,11 +47,9 @@ app.get('/', function (req, res) {
         memories.push("<p>"+ result.rows[i].message  + "</p><br>");
         username.push(result.rows[i].username);
         message.push(result.rows[i].message);
-        //create a new html element 
-        //then append that element to existing container
-        //then display the page
       }
-      document.getElementById("postContainer").innerHTML = memories;
+      //read the html file first
+      //document.getElementById("postContainer").innerHTML = memories;
       res.send(memories);
 
       client.release();
