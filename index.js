@@ -57,7 +57,7 @@ app.get('/', function (req, res) {
       const result = await client.query('SELECT * FROM forum');
      // const results = { 'results': (result) ? result.rows : null};
       for (var i = 0; i < result.rows.length; i++) {
-        log += result.rows[i] + "<br>";
+        log += result.rows[i].message + "<br>";
       }
       res.send(log);
       username = result.rows[0].username;
