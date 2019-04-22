@@ -49,6 +49,7 @@ app.get('/', function (req, res) {
 
  var username;
  var message;
+ var log = " ";
 
  app.get('/db', async (req, res) => {
     try {
@@ -56,8 +57,9 @@ app.get('/', function (req, res) {
       const result = await client.query('SELECT * FROM forum');
      // const results = { 'results': (result) ? result.rows : null};
       for (var i = 0; i < result.rows.length; i++) {
-        res.send(result.rows[i]);
+        log += result.rows[i] + "<br>";
       }
+      res.send(log);
       username = result.rows[0].username;
       message = result.rows[0].message;
       client.release();
