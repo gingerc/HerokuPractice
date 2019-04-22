@@ -53,8 +53,7 @@ app.get('/', function (req, res) {
       });
       
     //  const results = { 'results': (result) ? result.rows : null};  
-      memories.push(log);
-      res.send(memories);
+      res.send(log);
     //   username = result.rows[0].username;
     //   message = result.rows[0].message;
       client.release();
