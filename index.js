@@ -26,6 +26,7 @@ const pool = new Pool({
     ssl:true
 });
 
+
 // let client = new Client({database: 'forum', ssl:true})
 // client.connect()
 
@@ -71,26 +72,27 @@ app.post('/post', function (req, res) {
     if (text == " "){
         res.send('please enter something');
     } else {
-        try {
-            const client = pool.connect()
-            client.query('INSERT INTO forum (message) VALUES (\'' + text + '\')',  (err, res) => {
-                if (err) { console.log(err)}
-                else {
-                    console.log("posted successfully");
-                }
-             })
-            client.release();
-          } catch (err){
-              console.error(err);
-              res.send("Error" + err);
-          }
-        // const client = pool.connect();
-        // client.query('INSERT INTO forum (message) VALUES (\'' + text + '\')',  (err, res) => {
-        //     if (err) { console.log(err)}
-        //     else {
-        //         console.log("posted successfully");
-        //     }
-        //  })
+        // try {
+        //     const client = pool.connect()
+        //     client.query('INSERT INTO forum (message) VALUES (\'' + text + '\')',  (err, res) => {
+        //         if (err) { console.log(err)}
+        //         else {
+        //             console.log("posted successfully");
+        //         }
+        //      })
+        //     client.release();
+        //   } catch (err){
+        //       console.error(err);
+        //       res.send("Error" + err);
+        //   }
+        const client = pool.connect();
+        client.query('INSERT INTO forum (message) VALUES (\'' + text + '\')',  (err, res) => {
+            if (err) { console.log(err)}
+            else {
+                console.log("posted successfully");
+            }
+         })
+         client.release();
     }
     res.redirect('/');
 })
