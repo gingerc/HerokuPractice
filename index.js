@@ -2,6 +2,8 @@ const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
 var mustacheExpress = require('mustache-express');
+var request = require('request');
+var fs = require('fs');
 
 const app = express ();
 const PORT = process.env.PORT || 5000
@@ -34,7 +36,7 @@ app.get('/', function (req, res) {
 
  var username;
  var message;
- var log = " ";
+
 
  app.get('/db', async (req, res) => {
     try {
@@ -43,12 +45,12 @@ app.get('/', function (req, res) {
      // const results = { 'results': (result) ? result.rows : null};
       for (var i = 0; i < result.rows.length; i++) {
         //log += result.rows[i].message + "<br>";
-        memories.push(result.rows[i].message + "<br>");
+        memories.push("<p>" + result.rows[i].message + "</p><br>");
         //create a new html element 
         //then append that element to existing container
         //then display the page
       }
-      res.send(memories);
+      res.send(JSON.parse(memories);
       username = result.rows[0].username;
       message = result.rows[0].message;
       client.release();
