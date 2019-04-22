@@ -45,14 +45,14 @@ const pool = new Pool({
     
 //  })
 
- app.get('/db', async (req, res) => {
+ app.get('/', async (req, res) => {
     try {
       const client = await pool.connect()
       const result = await client.query('SELECT * FROM forum');
       //const results = { 'results': (result) ? result.rows : null};
       for (var i = 0; i < result.rows.length; i++) {
         //log += result.rows[i].message + "<br>";
-        memories.push("<p>"+ result.rows[i].message  + "</p><br>");
+        memories = result.rows;
         // username.push(result.rows[i].username);
         // message.push(result.rows[i].message);
       }

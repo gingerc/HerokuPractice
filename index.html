@@ -12,7 +12,9 @@
      <div id="postContainer">
          <div class="post" style='background-color: slategray; opacity:0.8'>
             <!-- <p> {{name}} says</p> -->
-            <p>" {{memories}} "</p>
+            {{#memories}}
+            <p>{{ message }}</p>
+            {{/memories}}
         </div>
 
      </div>
