@@ -55,7 +55,7 @@ app.get('/', function (req, res) {
       const client = await pool.connect()
       const result = await client.query('SELECT * FROM forum');
      // const results = { 'results': (result) ? result.rows : null};
-      for (var i = 0; i < result.rows.length, i++){
+      for (var i = 0; i < result.rows.length; i++) {
         res.send(result.rows[i]);
       }
       username = result.rows[0].username;
