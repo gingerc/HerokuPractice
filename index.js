@@ -2,7 +2,6 @@ const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
 const mustacheExpress = require('mustache-express');
-const url = require('url')
 
 const app = express ();
 const PORT = process.env.PORT || 5000
@@ -55,7 +54,7 @@ app.post('/post', function (req, res) {
         res.send('please enter something');
     } else {
   
-        client.query('INSERT INTO forum (message) VALUES (\'' + text + '\')',  (err, res) => {
+        client.query('INSERT INTO forum (message) VALUES ($1)', [text],  (err, res) => {
             if (err) { console.log(err)}
             else {
                 console.log("posted successfully");
