@@ -66,18 +66,31 @@ const pool = new Pool({
     }
 })
 
-app.post('/post', function (req, res){
+app.post('/post', function (req, res) {
     var text = req.body.userinput;
     if (text == " "){
         res.send('please enter something');
     } else {
-        const client = await pool.connect();
-        client.query('INSERT INTO forum (message) VALUES (\'' + text + '\')',  (err, res) => {
-            if (err) { console.log(err)}
-            else {
-                console.log("posted successfully");
-            }
-         })
+        try {
+            const client = pool.connect()
+            client.query('INSERT INTO forum (message) VALUES (\'' + text + '\')',  (err, res) => {
+                if (err) { console.log(err)}
+                else {
+                    console.log("posted successfully");
+                }
+             })
+            client.release();
+          } catch (err){
+              console.error(err);
+              res.send("Error" + err);
+          }
+        // const client = pool.connect();
+        // client.query('INSERT INTO forum (message) VALUES (\'' + text + '\')',  (err, res) => {
+        //     if (err) { console.log(err)}
+        //     else {
+        //         console.log("posted successfully");
+        //     }
+        //  })
     }
     res.redirect('/');
 })
