@@ -71,6 +71,7 @@ app.post('/post', function (req, res){
     if (text == " "){
         res.send('please enter something');
     } else {
+        const client = await pool.connect();
         client.query('INSERT INTO forum (message) VALUES (\'' + text + '\')',  (err, res) => {
             if (err) { console.log(err)}
             else {
