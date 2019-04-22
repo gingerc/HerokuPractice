@@ -44,12 +44,13 @@ app.get('/', function (req, res) {
      // const results = { 'results': (result) ? result.rows : null};
       for (var i = 0; i < result.rows.length; i++) {
         //log += result.rows[i].message + "<br>";
-        memories.push("<p>" + result.rows[i].message + "</p><br>");
+        memories.push(result.rows[i].message  + "<br>");
         //create a new html element 
         //then append that element to existing container
         //then display the page
       }
       res.send(JSON.parse(memories));
+      console.log(JSON.parse(memories));
       username = result.rows[0].username;
       message = result.rows[0].message;
       client.release();
