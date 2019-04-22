@@ -34,7 +34,7 @@ app.get('/', function (req, res) {
       const client = await pool.connect()
       const result = await client.query('SELECT * FROM posts');
      // const results = { 'results': (result) ? result.rows : null};
-      res.send(result);
+      res.send(result.rows[0]);
       client.release();
     } catch (err){
         console.error(err);
