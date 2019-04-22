@@ -44,18 +44,17 @@ app.get('/', function (req, res) {
           if (err){
               console.log(err)
           }
-          for (var row of res.rows){
-              memories.push(JSON.parse((JSON.stringify(row))).message);
+          for (var i = 0; i < result.rows.length; i++) {
+            log += result.rows[i].message + "<br>";
+            //create a new html element 
+            //then append that element to existing container
+            //then display the page
           }
       });
+      
+    //  const results = { 'results': (result) ? result.rows : null};  
+      memories.push(log);
       res.send(memories);
-     // const results = { 'results': (result) ? result.rows : null};
-    //   for (var i = 0; i < result.rows.length; i++) {
-    //     log += result.rows[i].message + "<br>";
-    //     //create a new html element 
-    //     //then append that element to existing container
-    //     //then display the page
-    //   }
     //   username = result.rows[0].username;
     //   message = result.rows[0].message;
       client.release();
