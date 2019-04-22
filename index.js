@@ -10,6 +10,7 @@ const pool = new Pool({
     ssl:true
 });
 
+
 // var client = new Client({database: 'memoryforum'});
 // client.connect();
 
@@ -47,7 +48,7 @@ express()
         const client = await pool.connect()
         const result = await client.query('SELECT * FROM posts');
         const results = { 'results': (result) ? result.rows : null};
-        res.render('/db', results);
+        console.log(results);
         client.release();
       } catch (err){
           console.error(err);
