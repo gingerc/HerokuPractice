@@ -17,18 +17,16 @@ app.use(bodyParser.urlencoded({    //url support
     extended: true
   })); 
 app.use('/public', express.static('public'));
-
+const {Client} = require('pg');
 
 //HEROKU_POSTGRESQL_MAUVE_URL
-
-const {Client} = require('pg');
 
 // const pool = new Pool({
 //     connectionString: process.env.DATABASE_URL,
 //     ssl:true
 // });
 
-let client = new Client({database: 'dbtest1', ssl:true})
+let client = new Client({database: 'forum', ssl:true})
 client.connect()
 
 app.get('/', function (req, res) {
@@ -47,15 +45,11 @@ app.get('/', function (req, res) {
     
  })
 
-//  var username = [];
-//  var message = [];
-
-
 //  app.get('/db', async (req, res) => {
 //     try {
 //       const client = await pool.connect()
 //       const result = await client.query('SELECT * FROM forum');
-//      // const results = { 'results': (result) ? result.rows : null};
+//       const results = { 'results': (result) ? result.rows : null};
 //       for (var i = 0; i < result.rows.length; i++) {
 //         //log += result.rows[i].message + "<br>";
 //         memories.push("<p>"+ result.rows[i].message  + "</p><br>");
