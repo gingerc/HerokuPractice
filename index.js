@@ -2,8 +2,7 @@ const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
 var mustacheExpress = require('mustache-express');
-var request = require('request');
-var fs = require('fs');
+
 
 const app = express ();
 const PORT = process.env.PORT || 5000
